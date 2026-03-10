@@ -1,0 +1,44 @@
+{
+  "name": "andexer/acorn-plugin",
+  "description": "Lleva la potencia de Laravel al ecosistema de WordPress. Este framework proporciona a los \"artesanos web\" herramientas modernas como un Contenedor de Servicios (IoC), Query Builder y soporte para CLI, eliminando el \"boilerplate\" repetitivo y permitiendo un desarrollo de plugins m\u00e1s r\u00e1pido y organizado.",
+  "type": "project",
+  "keywords": [
+    "composer-plugin",
+    "framework",
+    "plugin-wordpress",
+    "wordpress-plugin"
+  ],
+  "require": {
+    "roots/acorn": "^5.0",
+    "livewire/livewire": "^4.2",
+    "livewire/flux": "^2.13"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    },
+    "files": [
+      "app/helpers.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Andexer Arvelo",
+      "email": "arvelofalcon@gmail.com"
+    }
+  ],
+  "config": {
+    "platform": {
+      "php": "8.3"
+    },
+    "allow-plugins": {
+      "roots/acorn": true
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Roots\\Acorn\\ComposerScripts::postAutoloadDump"
+    ]
+  }
+}
