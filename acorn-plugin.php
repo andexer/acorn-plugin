@@ -40,5 +40,10 @@ add_action('plugins_loaded', function (): void {
 			LivewireServiceProvider::class,
 		])
 		->withRouting(wordpress: true)
+		->withExceptions(using: function (Exceptions $exceptions): void {
+			$exceptions->reportable(function (\Throwable $e): void {
+				Log::error(message: $e->getMessage());
+			});
+		})
 		->boot();
 }, 0);

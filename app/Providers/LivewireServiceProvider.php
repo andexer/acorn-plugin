@@ -23,6 +23,11 @@ class LivewireServiceProvider extends ServiceProvider
 		$pluginPath = base_path(); // Plugin directory (where vendor/ lives)
 		$pluginUrl = plugins_url('', base_path('acorn-plugin.php'));
 
+		// Forzar HTTPS si el sitio corre en SSL
+		if (function_exists('is_ssl') && is_ssl()) {
+			$pluginUrl = set_url_scheme($pluginUrl, 'https');
+		}
+
 		$this->publishLivewireAssets($pluginPath);
 		$this->configureLivewireAssetUrl($pluginUrl);
 		$this->publishFluxAssets($pluginPath);

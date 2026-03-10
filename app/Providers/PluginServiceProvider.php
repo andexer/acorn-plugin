@@ -25,15 +25,21 @@ class PluginServiceProvider extends ServiceProvider
 				\Illuminate\Foundation\Console\ModelMakeCommand::class,
 			]);
 		}
+		// Forzar HTTPS si WordPress está en SSL (soluciona el error Mixed Content)
+		if (function_exists('is_ssl') && is_ssl()) {
+			\Illuminate\Support\Facades\URL::forceScheme('https');
+		}
+
+		// Prioridad 10 para CSS
 		add_action('wp_head', function () {
 			echo \Illuminate\Support\Facades\Blade::render(
-				"@vite(['resources/css/app.css', 'resources/js/app.js'])\n@livewireStyles\n@fluxAppearance"
+				"@vite(['resources/css/app.css'])\n@livewireStyles"
 			);
 		});
 
 		add_action('wp_footer', function () {
 			echo \Illuminate\Support\Facades\Blade::render(
-				"@livewireScripts\n@fluxScripts"
+				"@vite(['resources/js/app.js'])\n@livewireScripts\n@fluxScripts"
 			);
 		});
 		// Registrar shortcodes inicializando los controladores
