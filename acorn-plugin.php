@@ -23,11 +23,7 @@ use App\Providers\PluginServiceProvider;
 use App\Providers\LivewireServiceProvider;
 
 if (! class_exists(Application::class)) {
-	/**
-	 * IMPORTANTE: Solo bootear en contexto HTTP, no en WP-CLI.
-	 * En WP-CLI usamos el comando "wp plugin-acorn" para manejar el plugin.
-	 */
-	add_action('admin_notices', function () {
+	add_action('admin_notices', function (): void {
 		printf(
 			'<div class="notice notice-error"><p>%s <a href="https://roots.io/acorn/docs/installation/">%s</a></p></div>',
 			__('Es necesario instalar Acorn para usar el plugin Acorn Plugin.', 'acorn-plugin'),
@@ -37,10 +33,9 @@ if (! class_exists(Application::class)) {
 	return;
 }
 
-
-add_action('plugins_loaded', function () {
+add_action('plugins_loaded', function (): void {
 	Application::configure()
-		->withProviders([
+		->withProviders(providers: [
 			PluginServiceProvider::class,
 			LivewireServiceProvider::class,
 		])
