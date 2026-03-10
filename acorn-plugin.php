@@ -44,5 +44,6 @@ add_action('plugins_loaded', function () {
 			PluginServiceProvider::class,
 			LivewireServiceProvider::class,
 		])
+		->withRouting(wordpress: true)
 		->boot();
 }, 0);

@@ -166,13 +166,39 @@ class LivewireServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Configure Vite to use the plugin's public directory.
+	 * Configure Vite to use the plugin's public directory by overriding the singleton.
 	 */
 	private function configureVite(string $pluginUrl, string $pluginPath): void
 	{
-		$vite = $this->app->make(\Illuminate\Foundation\Vite::class);
-		
-		$vite->useBuildDirectory('build')
-			->useManifestFilename($pluginPath . '/public/build/manifest.json');
+		$this->app->singleton('assets.vite', function () use ($pluginUrl, $pluginPath) {
+			return new class($this->app) extends \Roots\Acorn\Assets\Vite {
+				protected $pluginUrl;
+				protected $pluginPath;
+
+				public function __construct($app)
+				{
+					// We need to find the plugin paths
+					$this->pluginPath = base_path();
+					$this->pluginUrl = plugins_url('', base_path('acorn-plugin.php'));
+				}
+
+				protected function publicPath($path)
+				{
+					return $this->pluginPath . '/public/' . ltrim($path, '/');
+				}
+
+				protected function manifestPath($buildDirectory)
+				{
+					return $this->publicPath($buildDirectory . '/' . $this->manifestFilename);
+				}
+
+				protected function assetPath($path, $secure = null)
+				{
+					return $this->pluginUrl . '/public/' . ltrim($path, '/');
+				}
+			};
+		});
+
+		$this->app->alias('assets.vite', \Illuminate\Foundation\Vite::class);
 	}
 }
